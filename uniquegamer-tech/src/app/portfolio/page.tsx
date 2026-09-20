@@ -1,406 +1,225 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { 
-  GitBranch, 
-  Mail, 
-  ExternalLink, 
-  Code2, 
-  BrainCircuit, 
-  Blocks, 
-  Share2,
-  Sparkles,
-  Cpu,
-  Cloud,
-  Database,
-  Bot,
-  Shield,
-  Zap,
-  Globe,
-  ArrowRight
-} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
+import { ArrowRight, Code2, BrainCircuit, Sparkles, Zap, Globe } from "lucide-react";
+import { profiles } from "@/data/portfolio";
 
-const profiles = [
-  {
-    name: "Shah Husain",
-    title: "Software Engineer & AI Automation Specialist",
-    subtitle: "Blockchain Developer | Generative AI Expert",
-    bio: "Passionate software engineering student at UET with expertise in building cutting-edge solutions across AI automation, blockchain, and cloud technologies. Microsoft Certified Database Developer focused on creating intelligent agentic systems and scalable applications.",
-    avatar: "/avatars/shah-husain.jpg",
-    skills: [
-      { name: "Software Engineering", icon: Code2, color: "text-blue-500" },
-      { name: "AI Automation", icon: Bot, color: "text-purple-500" },
-      { name: "Blockchain", icon: Blocks, color: "text-orange-500" },
-      { name: "Generative AI", icon: Sparkles, color: "text-pink-500" },
-      { name: "Agentic Systems", icon: BrainCircuit, color: "text-cyan-500" },
-      { name: "Docker", icon: Cloud, color: "text-blue-600" },
-      { name: "Kubernetes", icon: Cloud, color: "text-indigo-500" },
-      { name: "Database Dev", icon: Database, color: "text-green-500" },
-    ],
-    socialLinks: {
-      github: "https://github.com/Lordhussnain",
-      linkedin: "https://www.linkedin.com/in/shah-hussain-b958b536b/",
-      modelscope: "https://www.modelscope.ai/profile/HasnainAli866",
-    },
-    highlights: [
-      { text: "Microsoft Certified Database Developer", icon: Database, gradient: "from-blue-500 to-cyan-500" },
-      { text: "Software Engineering Student at UET", icon: Code2, gradient: "from-purple-500 to-pink-500" },
-      { text: "Generative AI & Agentic Systems Developer", icon: BrainCircuit, gradient: "from-orange-500 to-red-500" },
-      { text: "Cloud/DevOps: Docker & Kubernetes", icon: Cloud, gradient: "from-green-500 to-emerald-500" },
-    ],
-    stats: [
-      { label: "Projects", value: "15+" },
-      { label: "Certifications", value: "5+" },
-      { label: "Technologies", value: "20+" },
-    ],
-  },
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-    },
-  },
-};
-
-const floatingAnimation = {
-  animate: {
-    y: [-10, 10, -10],
-    transition: {
-      duration: 4,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  },
+const getIcon = (iconName: string) => {
+  switch (iconName) {
+    case "code":
+      return Code2;
+    case "bot":
+    case "brain":
+      return BrainCircuit;
+    default:
+      return Code2;
+  }
 };
 
 export default function PortfolioPage() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl"
-          animate={{ x: [-50, 50, -50], y: [-30, 30, -30] }}
-          transition={{ duration: 12, repeat: Infinity }}
-        />
-      </div>
+  const gradientMap: Record<string, string> = {
+    "shah-husain": "from-blue-500 via-purple-500 to-pink-500",
+    "hasnain-ali": "from-emerald-500 via-teal-500 to-cyan-500",
+  };
 
-      {/* Header Section */}
-      <section className="container mx-auto px-4 py-20 md:py-32 relative z-10">
+  return (
+    <div className="min-h-screen bg-black relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-black to-black" />
+      
+      {/* Floating Gradient Orbs */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, 90, 0],
+          x: [0, 100, 0],
+          y: [0, -50, 0],
+        }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute top-20 left-20 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.3, 1],
+          rotate: [0, -90, 0],
+          x: [0, -80, 0],
+          y: [0, 60, 0],
+        }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        className="absolute bottom-40 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          x: [0, 50, 0],
+          y: [0, -30, 0],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl"
+      />
+
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-4xl mx-auto mb-20"
+          className="text-center mb-20"
         >
-          <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm border-primary/20 bg-primary/5">
-            <Sparkles className="w-3 h-3 mr-2 text-primary" />
-            Portfolio
-          </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Meet Our Team
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20"
+          >
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            <span className="text-sm font-medium text-purple-300">Meet Our Team</span>
+          </motion.div>
+          
+          <h1 className="text-5xl sm:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+            The Minds Behind
+            <br />
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Innovation
+            </span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Visionary developers and innovators shaping the future of technology through 
-            <span className="text-primary font-semibold"> AI</span>,
-            <span className="text-purple-500 font-semibold"> Blockchain</span>, and
-            <span className="text-cyan-500 font-semibold"> Cloud Solutions</span>
+          
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Discover the talented individuals driving Uniquegamer Tech forward with cutting-edge solutions
           </p>
         </motion.div>
 
-        {/* Profiles Grid */}
+        {/* Stats Section */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 max-w-4xl mx-auto"
         >
-          {profiles.map((profile, index) => (
-            <motion.div key={index} variants={cardVariants}>
-              <Card className="overflow-hidden border-2 hover:border-primary/30 transition-all duration-500 group bg-card/50 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:shadow-primary/10">
-                {/* Gradient Border Top */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-primary via-purple-500 to-pink-500" />
-                
-                <CardHeader className="text-center pb-4 pt-8 relative">
-                  {/* Decorative Elements */}
-                  <motion.div
-                    className="absolute top-4 right-4"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  >
-                    <Zap className="w-5 h-5 text-yellow-500/30" />
-                  </motion.div>
-                  
-                  <div className="flex justify-center mb-6 relative">
-                    {/* Glow Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-xl"
-                      animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                    />
-                    
-                    <Avatar className="w-40 h-40 border-4 border-border group-hover:border-primary transition-all duration-500 relative z-10 shadow-2xl">
-                      <AvatarImage src={profile.avatar} alt={profile.name} />
-                      <AvatarFallback className="text-4xl font-bold bg-gradient-to-br from-primary/30 via-purple-500/20 to-pink-500/30 text-primary">
-                        {profile.name.split(" ").map(n => n[0]).join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                  
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <CardTitle className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                      {profile.name}
-                    </CardTitle>
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <Code2 className="w-4 h-4 text-primary" />
-                      <CardDescription className="text-base font-semibold text-primary">
-                        {profile.title}
-                      </CardDescription>
-                    </div>
-                    <p className="text-sm text-muted-foreground font-medium">{profile.subtitle}</p>
-                  </motion.div>
-                </CardHeader>
-
-                <CardContent className="space-y-6 px-6 pb-8">
-                  <Separator className="bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-
-                  {/* Stats */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="grid grid-cols-3 gap-4 py-4"
-                  >
-                    {profile.stats.map((stat, statIndex) => (
-                      <div key={statIndex} className="text-center p-3 rounded-lg bg-gradient-to-br from-primary/5 to-purple-500/5 border border-primary/10">
-                        <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-                          {stat.value}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
-                      </div>
-                    ))}
-                  </motion.div>
-
-                  <Separator className="bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-
-                  {/* Highlights */}
-                  <div className="space-y-3">
-                    <h3 className="text-sm font-semibold flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-primary" />
-                      Key Achievements
-                    </h3>
-                    <div className="grid grid-cols-1 gap-3">
-                      {profile.highlights.map((highlight, hlIndex) => (
-                        <motion.div
-                          key={hlIndex}
-                          whileHover={{ scale: 1.02, x: 5 }}
-                          className="flex items-start gap-3 p-3 rounded-lg bg-gradient-to-r from-background to-muted/30 border border-primary/10 hover:border-primary/30 transition-all duration-300 group/item"
-                        >
-                          <div className={`p-2 rounded-lg bg-gradient-to-br ${highlight.gradient} text-white shadow-lg`}>
-                            <highlight.icon className="w-4 h-4" />
-                          </div>
-                          <span className="text-sm text-muted-foreground group-hover/item:text-foreground transition-colors">
-                            {highlight.text}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Separator className="bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-
-                  {/* Bio */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="p-4 rounded-lg bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5 border border-primary/10"
-                  >
-                    <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-primary" />
-                      About Me
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {profile.bio}
-                    </p>
-                  </motion.div>
-
-                  {/* Skills */}
-                  <div>
-                    <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-primary" />
-                      Technical Expertise
-                    </h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {profile.skills.map((skill, skillIndex) => (
-                        <motion.div
-                          key={skillIndex}
-                          whileHover={{ scale: 1.05, x: 3 }}
-                          className="flex items-center gap-2 p-2.5 rounded-lg bg-background/50 border border-primary/10 hover:border-primary/30 transition-all duration-300 group/skill"
-                        >
-                          <skill.icon className={`w-4 h-4 ${skill.color} group-hover/skill:scale-110 transition-transform`} />
-                          <span className="text-xs font-medium text-muted-foreground group-hover/skill:text-foreground transition-colors">
-                            {skill.name}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Social Links */}
-                  <div>
-                    <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-primary" />
-                      Connect With Me
-                    </h3>
-                    <div className="grid grid-cols-3 gap-3">
-                      {profile.socialLinks.github && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="group/btn hover:bg-[#24292e] hover:text-white hover:border-[#24292e] transition-all duration-300"
-                        >
-                          <Link href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer">
-                            <GitBranch className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                            GitHub
-                          </Link>
-                        </Button>
-                      )}
-                      {profile.socialLinks.linkedin && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="group/btn hover:bg-[#0A66C2] hover:text-white hover:border-[#0A66C2] transition-all duration-300"
-                        >
-                          <Link href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
-                            <Share2 className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                            LinkedIn
-                          </Link>
-                        </Button>
-                      )}
-                      {profile.socialLinks.modelscope && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="group/btn hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:text-white hover:border-purple-600 transition-all duration-300"
-                        >
-                          <Link href={profile.socialLinks.modelscope} target="_blank" rel="noopener noreferrer">
-                            <BrainCircuit className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                            ModelScope
-                          </Link>
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* CTA Button */}
-                  <Button
-                    className="w-full group/btn bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-primary/25 transition-all duration-300"
-                    asChild
-                  >
-                    <Link href="/contact">
-                      Let&apos;s Collaborate
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+          {[
+            { icon: Code2, label: "Projects", value: "50+", color: "text-blue-400" },
+            { icon: BrainCircuit, label: "AI Models", value: "12+", color: "text-purple-400" },
+            { icon: Zap, label: "Technologies", value: "20+", color: "text-pink-400" },
+            { icon: Globe, label: "Clients", value: "30+", color: "text-emerald-400" },
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 + index * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 text-center group hover:border-white/20 transition-all"
+            >
+              <stat.icon className={`w-8 h-8 mx-auto mb-3 ${stat.color} group-hover:scale-110 transition-transform`} />
+              <div className={`text-3xl font-bold ${stat.color} mb-1`}>{stat.value}</div>
+              <div className="text-sm text-gray-400">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
-      </section>
 
-      {/* CTA Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="container mx-auto px-4 py-20 relative z-10"
-      >
-        <Card className="max-w-5xl mx-auto bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 border-primary/20 backdrop-blur-sm overflow-hidden relative">
-          {/* Animated Background */}
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div
-              className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-bl from-primary/5 to-transparent rounded-full blur-3xl"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-          
-          <CardContent className="py-16 text-center relative z-10">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" />
-            </motion.div>
+        {/* Profile Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {profiles.map((profile, index) => {
+            const IconComponent = getIcon(profile.skills[0].icon);
+            const gradient = gradientMap[profile.slug];
             
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              Ready to Build Something Extraordinary?
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-              We&apos;re passionate about turning innovative ideas into reality. Let&apos;s discuss your next project and create something amazing together.
+            return (
+              <motion.div
+                key={profile.slug}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 + index * 0.2 }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="group cursor-pointer"
+              >
+                <Link href={`/portfolio/${profile.slug}`}>
+                  <Card className="relative overflow-hidden bg-white/5 backdrop-blur-md border-white/10 hover:border-white/20 transition-all duration-500 h-full group/card">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover/card:opacity-10 transition-opacity duration-500`} />
+
+                    <CardContent className="relative p-8 flex flex-col items-center text-center">
+                      <motion.div
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        className={`mb-6 p-4 rounded-2xl bg-gradient-to-br ${gradient} shadow-lg shadow-purple-500/25`}
+                      >
+                        <IconComponent className="w-10 h-10 text-white" />
+                      </motion.div>
+
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="mb-6 relative"
+                      >
+                        <div className={`absolute inset-0 bg-gradient-to-r ${gradient} rounded-full blur-xl opacity-50 group-hover/card:opacity-75 transition-opacity`} />
+                        <Avatar className="w-32 h-32 ring-4 ring-white/10 group-hover/card:ring-white/30 transition-all relative">
+                          <AvatarFallback className={`text-4xl font-bold bg-gradient-to-br ${gradient} text-white`}>
+                            {profile.avatarText}
+                          </AvatarFallback>
+                        </Avatar>
+                      </motion.div>
+
+                      <h2 className="text-2xl font-bold text-white mb-2 group-hover/card:bg-gradient-to-r group-hover/card:from-white group-hover/card:to-gray-300 group-hover/card:bg-clip-text group-hover/card:text-transparent transition-all duration-300">
+                        {profile.name}
+                      </h2>
+
+                      <p className="text-lg text-gray-300 mb-1">{profile.role}</p>
+                      <p className="text-sm text-gray-500 mb-6">{profile.tagline}</p>
+
+                      <div className="flex gap-4 mb-6">
+                        <div className="text-center">
+                          <div className="text-xl font-bold text-white">{profile.stats[0].value}</div>
+                          <div className="text-xs text-gray-500">{profile.stats[0].label}</div>
+                        </div>
+                        <div className="w-px bg-gray-700" />
+                        <div className="text-center">
+                          <div className="text-xl font-bold text-white">{profile.stats[1].value}</div>
+                          <div className="text-xs text-gray-500">{profile.stats[1].label}</div>
+                        </div>
+                      </div>
+
+                      <motion.div initial={{ x: 0 }} whileHover={{ x: 5 }} className="mt-auto">
+                        <span className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${gradient} text-white font-medium text-sm shadow-lg group-hover/card:shadow-xl transition-all duration-300`}>
+                          View Profile
+                          <ArrowRight className="w-4 h-4 group-hover/card:translate-x-1 transition-transform" />
+                        </span>
+                      </motion.div>
+                    </CardContent>
+
+                    <div className="absolute top-4 left-4 w-16 h-16 bg-gradient-to-br from-white/5 to-transparent rounded-tl-2xl" />
+                    <div className="absolute bottom-4 right-4 w-16 h-16 bg-gradient-to-tl from-white/5 to-transparent rounded-br-2xl" />
+                  </Card>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="mt-20 text-center"
+        >
+          <div className="inline-flex flex-col items-center gap-4 p-8 rounded-3xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 border border-white/10 backdrop-blur-sm">
+            <Sparkles className="w-8 h-8 text-purple-400" />
+            <h3 className="text-xl font-semibold text-white">Want to join our team?</h3>
+            <p className="text-gray-400 max-w-md">
+              We&apos;re always looking for talented individuals passionate about technology and innovation.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild className="group/btn bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 text-white shadow-lg hover:shadow-xl hover:shadow-primary/25 transition-all duration-300">
-                <Link href="/contact">
-                  Get In Touch
-                  <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:rotate-45 transition-transform" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild className="group/btn border-primary/30 hover:bg-primary/10 transition-all duration-300">
-                <Link href="/services">
-                  Explore Services
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.section>
+            <Link
+              href="/contact"
+              className="px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all hover:scale-105"
+            >
+              Get in Touch
+            </Link>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
